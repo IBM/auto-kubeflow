@@ -1,8 +1,23 @@
+terraform {
+  required_providers {
+    ibm = {
+      source = "IBM-Cloud/ibm"
+      version = "1.21.2"
+    }
+  }
+}
+
+provider "ibm" {
+  # Configuration options
+  region = var.region
+  ibmcloud_api_key = var.ibmcloud_api_key
+}
+
 resource "ibm_resource_instance" "appid_instance" {
   name     = var.name
   service  = "appid"
   plan     = var.plan
-  location = var.location
+  location = var.region
 }
 
 resource "ibm_iam_service_id" "appid_serviceid" {

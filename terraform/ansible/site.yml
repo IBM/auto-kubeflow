@@ -1,0 +1,5 @@
+---
+- name: set up kubeflow
+  hosts: driver
+  roles:
+    - login

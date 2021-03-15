@@ -1,0 +1,10 @@
+all:
+  hosts:
+    localhost:
+      ansible_connection: local
+  children:
+    driver:
+      hosts:
+        localhost:
+          ansible_connection: local
+
