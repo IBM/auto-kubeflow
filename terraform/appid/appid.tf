@@ -14,19 +14,19 @@ provider "ibm" {
 }
 
 resource "ibm_resource_instance" "appid_instance" {
-  name     = var.name
+  name     = "${var.name}${var.name_suffix}"
   service  = "appid"
   plan     = var.plan
   location = var.region
 }
 
 resource "ibm_iam_service_id" "appid_serviceid" {
-  name        = "serviceid_4_appid"
+  name        = "serviceid_4_appid${var.name_suffix}"
   description = "service id for appid"
 }
 
 resource "ibm_resource_key" "resource_key" {
-  name                 = "manager_credentials"
+  name                 = "manager_credentials${var.name_suffix}"
   role                 = "Manager"
   resource_instance_id = ibm_resource_instance.appid_instance.id
   parameters = {
