@@ -2,13 +2,13 @@
 Use Schematics/Terraform + Ansible to create a VPC Gen 2 cluster on IBM Cloud,
 deploy kubeflow multi-user and integrate it with AppID service.
 
-The terraform templates are under `terraform` directory and used to create VPC
+The terraform templates are under this directory and used to create VPC
 Gen 2 cluster as well as AppID instance. The kubeflow deployment and
-configuration are done by Ansible playbook under `terraform/ansible` directory.
+configuration are done by Ansible playbook under `ansible` directory.
 It uses [Ansible provisioner](https://github.com/radekg/terraform-provisioner-ansible)
 to perform Ansilbe playbook.
 
-Note: The Ansible playbook under `terraform/asnible` directory assumes the execution
+Note: The Ansible playbook under `asnible` directory assumes the execution
 environment is Linux x86_64 architecture. If you want to run it locally, you may need
 to modify the playbook to accommodate your own environment.
 ## Inputs
