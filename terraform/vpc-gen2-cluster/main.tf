@@ -7,12 +7,6 @@ terraform {
   }
 }
 
-provider "ibm" {
-  generation       = 2
-  region           = var.region
-  ibmcloud_api_key = var.ibmcloud_api_key
-}
-
 resource "ibm_is_vpc" "vpc" {
   name = "vpc${var.name_suffix}"
 }
@@ -60,4 +54,7 @@ resource "ibm_container_vpc_cluster" "cluster" {
     subnet_id = ibm_is_subnet.subnet.id
     name      = "${var.region}-1"
   }
+  depends_on = [
+    null_resource.update_default_sg
+  ]
 }

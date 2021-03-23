@@ -7,12 +7,6 @@ terraform {
   }
 }
 
-provider "ibm" {
-  # Configuration options
-  region = var.region
-  ibmcloud_api_key = var.ibmcloud_api_key
-}
-
 resource "ibm_resource_instance" "appid_instance" {
   name     = "${var.name}${var.name_suffix}"
   service  = "appid"

@@ -43,6 +43,7 @@ module "cluster" {
   cluster_name         = var.cluster_name
   kube_version         = var.kube_version
   name_suffix          = local.name_suffix
+  depends_on           = [ module.appid ]
 }
 
 data "ibm_container_cluster_config" "cluster_config" {
@@ -53,10 +54,6 @@ resource "null_resource" "ansible" {
   triggers = {
     always_run = timestamp()
   }
-
-  # provisioner "local-exec" {
-  #   command = "ansible-galaxy install -p ${path.module}/ansible/roles andrewrothstein.kubectl"
-  # }
 
   provisioner "ansible" {
     plays {
@@ -86,5 +83,5 @@ resource "null_resource" "ansible" {
       }
     }
   }
-  depends_on = [module.appid, module.cluster]
+  depends_on = [module.cluster]
 }
