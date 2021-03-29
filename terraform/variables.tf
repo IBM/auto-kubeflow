@@ -48,7 +48,7 @@ variable cluster_name {
 }
 variable cluster_worker_count {
   type        = number
-  default     = 3
+  default     = 2
   description = "number of workers in the cluster"
 }
 

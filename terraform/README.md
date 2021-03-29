@@ -25,7 +25,7 @@ to modify the playbook to accommodate your own environment.
 |  appid_name            | Instnace name for AppID service | string  |   | appid-instance |  |
 |  cluster_name          | Cluster name | string  |   | my-kfp-cluster | |
 |  cluster_worker_flavor | The machine flavor for the cluster worker nodes | string  |   | bx2.8x32 |  |
-|  cluster_worker_count  | number of workers in the cluster | number  |   | 3 |  |
+|  cluster_worker_count  | number of workers in the cluster | number  |   | 2 |  |
 |  kfdef_uri             | kubeflow definition uri | string  |   | https://raw.githubusercontent.com/kubeflow/manifests/v1.2-branch/kfdef/kfctl_ibm_multi_user.v1.2.0.yaml |  |
 
 ## Outputs
@@ -58,7 +58,7 @@ Create the Schematics provisioner workspace:
      - `space` The space of IBM Cloud
 
      Note: In order to make the kubeflow work properly, the flavor of `bx2.8x32`
-     and 3 worker nodes are the minimal requirements.
+     and 2 worker nodes are the minimal requirements.
 
    - Click **Save changes**.
 3. From the workspace **Settings** page, click **Generate plan** 
