@@ -20,7 +20,7 @@ to modify the playbook to accommodate your own environment.
 |  org                   | IBM Cloud organization | string  |  ✓ |  |  |
 |  space                 | The space in IBM Cloud | string  | ✓ |  |  |
 |  resource_group        | The resource group in IBM Cloud | string  |  | default |  |
-|  kube_version          | kubernetes version | string  |  | 1.18.16 |  |
+|  kube_version          | kubernetes version | string  |  | 1.19.9 |  |
 |  appid_plan            | The plan for AppID | string  |  | lite |  |
 |  appid_name            | Instnace name for AppID service | string  |   | appid-instance |  |
 |  cluster_name          | Cluster name | string  |   | my-kfp-cluster | |
