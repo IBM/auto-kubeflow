@@ -1,0 +1,7 @@
+---
+- name: set up kubeflow
+  hosts: driver
+  roles:
+    - common
+    - deploy
+    - multi-user-vpc

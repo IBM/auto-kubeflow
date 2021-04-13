@@ -1,0 +1,113 @@
+---
+- name: get IAM token
+  uri:
+    url: "https://iam.cloud.ibm.com/identity/token"
+    method: POST
+    body_format: form-urlencoded
+    body: "grant_type=urn:ibm:params:oauth:grant-type:apikey&apikey={{ ibmcloud_api_key }}"
+  register: iam_token
+
+- name: update redirect_uris
+  uri:
+    url: "{{ appid_mgmt_url }}/config/redirect_uris"
+    method: PUT
+    headers:
+      Authorization: "Bearer {{ iam_token.json|json_query('access_token') }}"
+      accept: "application/json"
+    body_format: json
+    return_content: yes
+    status_code: [200, 204]
+    body: '{"redirectUris": ["https://{{ cluster_hostname }}/login/oidc"]}'
+
+- name: create appid config
+  shell: |
+    KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl delete secret appid-application-configuration -n istio-system || true
+    KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl create secret generic \
+    appid-application-configuration -n istio-system \
+    --from-literal="clientId={{ appid_clientId }}" \
+    --from-literal="secret={{ appid_secret }}" \
+    --from-literal="oAuthServerUrl={{ appid_oauthServerUrl }}" \
+    --from-literal="oidcRedirectUrl=https://{{ cluster_hostname }}/login/oidc"
+
+- name: restart oauth-service
+  shell: |
+    KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl rollout restart sts authservice -n istio-system
+
+- name: copy cert to istio-system
+  shell: |
+    KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl delete secret -n istio-system istio-ingressgateway-certs || true
+    KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl get secret \
+    {{ secret_name }} -n default -o json | {{ lookup('env', 'HOME') }}/bin/jq '.metadata.name="istio-ingressgateway-certs"|.metadata.namespace="istio-system"' \
+    | KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl apply -f -
+
+- name: restart istio-ingress service
+  shell: |
+    KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl rollout restart deploy istio-ingressgateway -n istio-system
+
+- name: create load balancer for istio-ingressgatewway
+  shell: |
+    KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl get svc/istio-ingressgateway -n istio-system -o json \
+    | {{ lookup('env', 'HOME') }}/bin/jq '.spec.type="LoadBalancer"' | KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl apply -f - || true
+
+    # wait for lb
+    while true; do
+      ingress_ip=$(KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl get svc/istio-ingressgateway -n istio-system -o json | jq -r '.status.loadBalancer.ingress[0].ip')
+      if [[ -z "$ingress_ip" || "$ingress_ip" = "null" ]]; then
+        sleep 20
+        continue
+      fi
+      break
+    done
+
+    EXISTING_IP=$(ibmcloud ks nlb-dns ls -c "{{ cluster_name }}" --output json | jq -r '.[0].nlbIPArray[0]')
+    if [ "$ingress_ip" != "$EXISTING_IP" ]; then
+      ibmcloud ks nlb-dns add -c "{{ cluster_name }}" --nlb-host "{{ cluster_hostname }}" --ip "$ingress_ip"
+      ibmcloud ks nlb-dns rm classic -c "{{ cluster_name }}" --nlb-host "{{ cluster_hostname }}" --ip "$EXISTING_IP"
+    fi
+
+- name: update kubeflow-gateway
+  shell: |
+    GATEWAY=$(cat << EOF
+    apiVersion: networking.istio.io/v1alpha3
+    kind: Gateway
+    metadata:
+      name: kubeflow-gateway
+      namespace: kubeflow
+    spec:
+      selector:
+        istio: ingressgateway
+      servers:
+      - port:
+          number: 80
+          name: http
+          protocol: HTTP
+        hosts:
+        - '{{ cluster_hostname }}'
+        - '*.{{ cluster_hostname }}'
+        tls:
+          httpsRedirect: true
+      - hosts:
+        - '{{ cluster_hostname }}'
+        - '*.{{ cluster_hostname }}'
+        port:
+          name: https
+          number: 443
+          protocol: HTTPS
+        tls:
+          mode: SIMPLE
+          privateKey: /etc/istio/ingressgateway-certs/tls.key
+          serverCertificate: /etc/istio/ingressgateway-certs/tls.crt
+    EOF
+    )
+
+    echo "$GATEWAY" | KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl apply -f -
+
+- name: update knative settings
+  shell: |
+    KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl get configmap config-domain -n knative-serving -o json \
+    | KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/jq '.data."{{ cluster_hostname }}"=""' \
+    | KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl apply -f -
+
+    KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl get configmap config-network -n knative-serving -o json \
+    | KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/jq '.data.domainTemplate="{{ '{{' }}.Name{{ '}}' }}-{{ '{{' }}.Namespace{{ '}}' }}.{{ '{{' }}.Domain{{ '}}' }}"' \
+    | KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl apply -f -

@@ -1,0 +1,41 @@
+---
+- name: login IBM Cloud
+  shell:
+    cmd: ibmcloud login --apikey "{{ ibmcloud_api_key }}" --no-region
+
+- name: set target
+  shell:
+    cmd: ibmcloud target -r "{{ region }}" -o "{{ org }}" -s "{{ space }}" -g "{{ resource_group }}"
+
+- name: create bin
+  file:
+    path: "{{ lookup('env', 'HOME') }}/bin"
+    state: directory
+    mode: '0755'
+
+- name: download kubectl
+  get_url:
+    url: https://storage.googleapis.com/kubernetes-release/release/{{ kubectl_ver }}/bin/linux/amd64/kubectl
+    dest: "{{ lookup('env', 'HOME') }}/bin/kubectl"
+    mode: '0555'
+
+- name: download kfctl
+  get_url:
+    url: https://github.com/kubeflow/kfctl/releases/download/v1.2.0/kfctl_v1.2.0-0-gbc038f9_linux.tar.gz
+    dest: "{{ lookup('env', 'HOME') }}/bin/kfctl.tar.gz"
+    mode: '0555'
+
+- name: download jq
+  get_url:
+    url: https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
+    dest: "{{ lookup('env', 'HOME') }}/bin/jq"
+    mode: '0555'
+
+- name: unarchive kfctl
+  unarchive:
+    src: "{{ lookup('env', 'HOME') }}/bin/kfctl.tar.gz"
+    dest: "{{ lookup('env', 'HOME') }}/bin"
+
+- name: get namespace
+  shell:
+    cmd: "KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl get ns"

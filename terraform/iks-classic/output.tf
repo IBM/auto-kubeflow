@@ -19,13 +19,13 @@ output "appid_oauthServerUrl" {
 }
 
 output "cluster_id" {
-  value = module.cluster.cluster_id
+  value = module.classic_cluster.cluster_id
 }
 
 output "cluster_name" {
-  value = module.cluster.cluster_name
+  value = module.classic_cluster.cluster_name
 }
 
 output "cluster_hostname" {
-  value = module.cluster.cluster_hostname
+  value = module.classic_cluster.cluster_hostname
 }

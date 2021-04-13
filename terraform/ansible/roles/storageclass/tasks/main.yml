@@ -1,0 +1,6 @@
+---
+- name: use file-gold-gid
+  shell: |
+    OLD_STORAGE_CLASS=$(KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl get sc -o jsonpath='{.items[?(@.metadata.annotations.storageclass\.kubernetes\.io\/is-default-class=="true")].metadata.name}')
+    KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl patch storageclass ibmc-file-gold-gid -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+    KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl patch storageclass ${OLD_STORAGE_CLASS} -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
