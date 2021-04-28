@@ -20,6 +20,7 @@ resource "random_id" "suffix" {
 
 locals {
   name_suffix           = "-${random_id.suffix.hex}"
+  kfdef_uri             = "https://raw.githubusercontent.com/kubeflow/manifests/v1.2-branch/kfdef/kfctl_ibm_multi_user.v1.2.0.yaml"
 }
 
 module "appid" {
@@ -79,7 +80,7 @@ resource "null_resource" "ansible" {
         cluster_name            = module.vpc_cluster.cluster_name
         secret_name             = module.vpc_cluster.cluster_secret
         kube_config             = data.ibm_container_cluster_config.cluster_config.config_file_path
-        kfdef_uri               = var.kfdef_uri
+        kfdef_uri               = local.kfdef_uri
       }
     }
   }

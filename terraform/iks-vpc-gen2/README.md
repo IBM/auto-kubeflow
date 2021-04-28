@@ -1,6 +1,7 @@
 # auto-kubeflow
 Use Schematics/Terraform + Ansible to create a VPC Gen 2 cluster on IBM Cloud,
-deploy kubeflow multi-user and integrate it with AppID service.
+deploy kubeflow v1.2 multi-user and integrate it with AppID service. It uses
+this kfdef: https://raw.githubusercontent.com/kubeflow/manifests/v1.2-branch/kfdef/kfctl_ibm_multi_user.v1.2.0.yaml
 
 The terraform templates are under this directory and used to create VPC
 Gen 2 cluster as well as AppID instance. The kubeflow deployment and
@@ -26,7 +27,6 @@ to modify the playbook to accommodate your own environment.
 |  cluster_name          | Cluster name | string  |   | my-kfp-cluster | |
 |  cluster_worker_flavor | The machine flavor for the cluster worker nodes | string  |   | bx2.8x32 |  |
 |  cluster_worker_count  | number of workers in the cluster | number  |   | 2 |  |
-|  kfdef_uri             | kubeflow definition uri | string  |   | https://raw.githubusercontent.com/kubeflow/manifests/v1.2-branch/kfdef/kfctl_ibm_multi_user.v1.2.0.yaml |  |
 
 ## Outputs
 
@@ -49,7 +49,7 @@ Create the Schematics provisioner workspace:
    - Enter a name for your workspace.   
    - Click **Create** to create your workspace.
 2. On the workspace **Settings** page, enter the URL of this terraform
-   template: `https://github.com/yhwang/auto-kubeflow/tree/main/terraform/iks-vpc-gen2`.
+   template: `https://github.com/yhwang/auto-kubeflow/tree/kfp-v1.2/terraform/iks-vpc-gen2`.
    - Select the Terraform version: Terraform 0.14.
    - Click **Save template information**.
    - In the **Input variables** section,  fill in the input variables. For example:

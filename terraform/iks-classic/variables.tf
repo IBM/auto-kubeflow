@@ -59,12 +59,6 @@ variable cluster_worker_flavor {
   description = "worker flavor for the cluster"
 }
 
-variable "kfdef_uri" {
-  default      = "https://raw.githubusercontent.com/kubeflow/manifests/v1.2-branch/kfdef/kfctl_ibm_multi_user.v1.2.0.yaml"
-  type         = string
-  description  = "kfdef uri"
-}
-
 variable "public_vlan_id" {
   default     = null
   type        = string
