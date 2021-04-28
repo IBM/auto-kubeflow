@@ -21,13 +21,15 @@
 
 - name: create appid config
   shell: |
-    KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl delete secret appid-application-configuration -n istio-system || true
+    KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl delete secret oidc-authservice-client -n istio-system || true
     KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl create secret generic \
-    appid-application-configuration -n istio-system \
-    --from-literal="clientId={{ appid_clientId }}" \
-    --from-literal="secret={{ appid_secret }}" \
-    --from-literal="oAuthServerUrl={{ appid_oauthServerUrl }}" \
-    --from-literal="oidcRedirectUrl=https://{{ cluster_hostname }}/login/oidc"
+      oidc-authservice-client -n istio-system \
+      --from-literal="CLIENT_ID={{ appid_clientId }}" \
+      --from-literal="CLIENT_SECRET={{ appid_secret }}"
+    KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl get configmap \
+      oidc-authservice-parameters -n istio-system -o json | {{ lookup('env', 'HOME') }}/bin/jq \
+      '.data.OIDC_AUTH_URL=""|.data.OIDC_PROVIDER="{{ appid_oauthServerUrl }}"|.data.REDIRECT_URL="https://{{ cluster_hostname }}/login/oidc"|.data.SKIP_AUTH_URI=""' | \
+      KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl apply -f -
 
 - name: restart oauth-service
   shell: |

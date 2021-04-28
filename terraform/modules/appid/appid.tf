@@ -17,6 +17,9 @@ resource "ibm_resource_instance" "appid_instance" {
 resource "ibm_iam_service_id" "appid_serviceid" {
   name        = "serviceid_4_appid${var.name_suffix}"
   description = "service id for appid"
+  depends_on = [
+    ibm_resource_instance.appid_instance
+  ]
 }
 
 resource "ibm_resource_key" "resource_key" {

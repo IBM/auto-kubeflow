@@ -20,6 +20,8 @@ resource "random_id" "suffix" {
 
 locals {
   name_suffix           = "-${random_id.suffix.hex}"
+  kfdef_uri             = "https://raw.githubusercontent.com/IBM/manifests/v1.3/distributions/kfdef/kfctl_ibm_multi_user.v1.3.0.yaml"
+  kube_version_str        = split(".", var.kube_version)
 }
 
 module "appid" {
@@ -41,7 +43,7 @@ module "classic_cluster" {
   flavor               = var.cluster_worker_flavor
   resource_group       = var.resource_group
   cluster_name         = var.cluster_name
-  kube_version         = var.kube_version
+  kube_version         = "${local.kube_version_str[0]}.${local.kube_version_str[1]}"
   name_suffix          = local.name_suffix
   public_vlan_id       = var.public_vlan_id
   private_vlan_id      = var.private_vlan_id
@@ -82,7 +84,7 @@ resource "null_resource" "ansible" {
         cluster_name            = module.classic_cluster.cluster_name
         secret_name             = module.classic_cluster.cluster_secret
         kube_config             = data.ibm_container_cluster_config.cluster_config.config_file_path
-        kfdef_uri               = var.kfdef_uri
+        kfdef_uri               = local.kfdef_uri
       }
     }
   }
