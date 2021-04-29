@@ -1,0 +1,47 @@
+---
+- name: update kubeflow-gateway
+  shell: |
+    GATEWAY=$(cat << EOF
+    apiVersion: networking.istio.io/v1alpha3
+    kind: Gateway
+    metadata:
+      name: kubeflow-gateway
+      namespace: kubeflow
+    spec:
+      selector:
+        istio: ingressgateway
+      servers:
+      - port:
+          number: 80
+          name: http
+          protocol: HTTP
+        hosts:
+        - '{{ cluster_hostname }}'
+        - '*.{{ cluster_hostname }}'
+        tls:
+          httpsRedirect: true
+      - hosts:
+        - '{{ cluster_hostname }}'
+        - '*.{{ cluster_hostname }}'
+        port:
+          name: https
+          number: 443
+          protocol: HTTPS
+        tls:
+          mode: SIMPLE
+          privateKey: /etc/istio/ingressgateway-certs/tls.key
+          serverCertificate: /etc/istio/ingressgateway-certs/tls.crt
+    EOF
+    )
+
+    echo "$GATEWAY" | KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl apply -f -
+
+- name: update knative settings
+  shell: |
+    KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl get configmap config-domain -n knative-serving -o json \
+    | KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/jq '.data."{{ cluster_hostname }}"=""' \
+    | KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl apply -f -
+
+    KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl get configmap config-network -n knative-serving -o json \
+    | KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/jq '.data.domainTemplate="{{ '{{' }}.Name{{ '}}' }}-{{ '{{' }}.Namespace{{ '}}' }}.{{ '{{' }}.Domain{{ '}}' }}"' \
+    | KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl apply -f -

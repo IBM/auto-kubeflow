@@ -1,0 +1,11 @@
+---
+- name: copy cert to istio-system
+  shell: |
+    KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl delete secret -n istio-system istio-ingressgateway-certs || true
+    KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl get secret \
+    {{ secret_name }} -n default -o json | {{ lookup('env', 'HOME') }}/bin/jq '.metadata.name="istio-ingressgateway-certs"|.metadata.namespace="istio-system"' \
+    | KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl apply -f -
+
+- name: restart istio-ingress service
+  shell: |
+    KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl rollout restart deploy istio-ingressgateway -n istio-system
