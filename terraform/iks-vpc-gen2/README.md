@@ -1,6 +1,7 @@
 # auto-kubeflow
 Use Schematics/Terraform + Ansible to create a VPC Gen 2 cluster on IBM Cloud,
-deploy kubeflow multi-user and integrate it with AppID service.
+deploy kubeflow v1.3 multi-user and integrate it with AppID service. It uses the
+kfdef here: "https://raw.githubusercontent.com/IBM/manifests/v1.3/distributions/kfdef/kfctl_ibm_multi_user.v1.3.0.yaml"
 
 The terraform templates are under this directory and used to create VPC
 Gen 2 cluster as well as AppID instance. The kubeflow deployment and
@@ -20,13 +21,12 @@ to modify the playbook to accommodate your own environment.
 |  org                   | IBM Cloud organization | string  |  ✓ |  |  |
 |  space                 | The space in IBM Cloud | string  | ✓ |  |  |
 |  resource_group        | The resource group in IBM Cloud | string  |  | default |  |
-|  kube_version          | kubernetes version | string  |  | 1.19.9 |  |
+|  kube_version          | kubernetes version | string  |  | 1.20.6 |  |
 |  appid_plan            | The plan for AppID | string  |  | lite |  |
 |  appid_name            | Instnace name for AppID service | string  |   | appid-instance |  |
 |  cluster_name          | Cluster name | string  |   | my-kfp-cluster | |
 |  cluster_worker_flavor | The machine flavor for the cluster worker nodes | string  |   | bx2.8x32 |  |
 |  cluster_worker_count  | number of workers in the cluster | number  |   | 2 |  |
-|  kfdef_uri             | kubeflow definition uri | string  |   | https://raw.githubusercontent.com/kubeflow/manifests/v1.2-branch/kfdef/kfctl_ibm_multi_user.v1.2.0.yaml |  |
 
 ## Outputs
 
