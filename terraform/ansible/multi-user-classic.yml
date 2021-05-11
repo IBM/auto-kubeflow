@@ -5,4 +5,7 @@
     - common
     - storageclass
     - deploy
+    - appid
+    - istio
     - multi-user-classic
+    - gateway

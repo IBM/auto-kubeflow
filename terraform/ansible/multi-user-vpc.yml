@@ -4,4 +4,7 @@
   roles:
     - common
     - deploy
+    - appid
+    - istio
     - multi-user-vpc
+    - gateway
