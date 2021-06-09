@@ -1,4 +1,4 @@
-# auto-kubeflow
+# Deploy Kubeflow on IBM Kubernetes Service using VPC Gen 2
 Use Schematics/Terraform + Ansible to create a VPC Gen 2 cluster on IBM Cloud,
 deploy kubeflow v1.3 multi-user and integrate it with AppID service. It uses the
 kfdef here: "https://raw.githubusercontent.com/IBM/manifests/v1.3/distributions/kfdef/kfctl_ibm_multi_user.v1.3.0.yaml"
