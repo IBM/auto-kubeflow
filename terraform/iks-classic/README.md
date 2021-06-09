@@ -1,4 +1,4 @@
-# auto-kubeflow
+# Deploy Kubeflow on IBM Kubernete Service using Classic cluster
 Use Schematics/Terraform + Ansible to create a classic cluster on IBM Cloud,
 deploy kubeflow v1.3 multi-user and integrate it with AppID service. It uses the
 kfdef here: "https://raw.githubusercontent.com/IBM/manifests/v1.3/distributions/kfdef/kfctl_ibm_multi_user.v1.3.0.yaml"
