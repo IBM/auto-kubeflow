@@ -18,7 +18,7 @@ variable space {
 
 variable kube_version {
   type        = string
-  default     = "1.20.6"
+  default     = "1.20.7"
   description = "kubectl version"
 }
 
