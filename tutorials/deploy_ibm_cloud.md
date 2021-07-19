@@ -46,7 +46,7 @@ In the case of deploying to a VPC Gen2 cluster, the script and description is in
 2. Create and configure Schematics workspace
   - Login to your account and create a Schematics workspace from menu Schematics-Workspaces, providing a name and taking defaults for the rest
   - To deploy Kubeflow onto a Classic cluster, configure your workspace in the Settings page
-    1. Github resource URL: [https://github.com/yhwang/auto-kubeflow/tree/main/terraform/iks-classic](https://github.com/yhwang/auto-kubeflow/tree/main/terraform/iks-classic)
+    1. Github resource URL: [https://github.com/IBM/auto-kubeflow/tree/main/terraform/iks-classic](https://github.com/IBM/auto-kubeflow/tree/main/terraform/iks-classic)
     2. Terraform version: terraform\_v0.14
     3. Save the template information as it should look similar to ![this](./workspace_settings_initial.PNG)
     4. Finally update variable values
@@ -59,7 +59,7 @@ In the case of deploying to a VPC Gen2 cluster, the script and description is in
       - public_vlan_id: The public vlan id. You can use ibmcloud ks vlan ls --zone <zone> to list the available public vlans
       - private_vlan_id: The private vlan id. You can use ibmcloud ks vlan ls --zone <zone> to list the available private vlans
   - To deploy Kubeflow onto a VPC Gen2 cluster, configure your workspace in the Settings page
-    1. Github resource URL: [https://github.com/yhwang/auto-kubeflow/tree/main/terraform/iks-vpc-gen2](https://github.com/yhwang/auto-kubeflow/tree/main/terraform/iks-vpc-gen2)
+    1. Github resource URL: [https://github.com/IBM/auto-kubeflow/tree/main/terraform/iks-vpc-gen2](https://github.com/IBM/auto-kubeflow/tree/main/terraform/iks-vpc-gen2)
     2. Terraform version: terraform\_v0.14
     3. Save the template information
     4. Finally update variable values
