@@ -4,18 +4,22 @@ output "appid_id" {
 
 output "appid_discoveryEndpoint" {
   value = module.appid.discoveryEndpoint
+  sensitive = true
 }
 
 output "appid_tenantId" {
   value = module.appid.tenantId
+  sensitive = true
 }
 
 output "appid_managementUrl" {
   value = module.appid.managementUrl
+  sensitive = true
 }
 
 output "appid_oauthServerUrl" {
   value = module.appid.oauthServerUrl
+  sensitive = true
 }
 
 output "cluster_id" {

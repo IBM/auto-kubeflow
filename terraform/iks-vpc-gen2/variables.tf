@@ -63,3 +63,13 @@ variable cluster_worker_flavor {
   default     = "bx2.8x32"
   description = "worker flavor for the cluster"
 }
+
+variable "username" {
+  type        = string
+  description = "username to login kubeflow dashboard"
+}
+
+variable "password" {
+  type        = string
+  description = "password to login kubeflow dashboard"
+}

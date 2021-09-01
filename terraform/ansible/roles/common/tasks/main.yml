@@ -19,10 +19,10 @@
     dest: "{{ lookup('env', 'HOME') }}/bin/kubectl"
     mode: '0555'
 
-- name: download kfctl
+- name: download kustomize
   get_url:
-    url: https://github.com/kubeflow/kfctl/releases/download/v1.2.0/kfctl_v1.2.0-0-gbc038f9_linux.tar.gz
-    dest: "{{ lookup('env', 'HOME') }}/bin/kfctl.tar.gz"
+    url: https://github.com/kubernetes-sigs/kustomize/releases/download/v3.2.0/kustomize_3.2.0_linux_amd64
+    dest: "{{ lookup('env', 'HOME') }}/bin/kustomize"
     mode: '0555'
 
 - name: download jq
@@ -31,10 +31,16 @@
     dest: "{{ lookup('env', 'HOME') }}/bin/jq"
     mode: '0555'
 
-- name: unarchive kfctl
+- name: download manifest
+  get_url:
+    url: https://github.com/IBM/manifests/archive/v1.3.1.tar.gz
+    dest: "{{ lookup('env', 'HOME') }}/v1.3.1.tar.gz"
+    mode: '0555'
+
+- name: unarchive manifest
   unarchive:
-    src: "{{ lookup('env', 'HOME') }}/bin/kfctl.tar.gz"
-    dest: "{{ lookup('env', 'HOME') }}/bin"
+    src: "{{ lookup('env', 'HOME') }}/v1.3.1.tar.gz"
+    dest: "{{ lookup('env', 'HOME') }}/"
 
 - name: download kubeflow logo
   get_url:

@@ -27,9 +27,9 @@ Here is the summary of the contnets provided in this repo (more to come):
 - [Step by step tutorial of using Schematics service and resources on this repo
   to deploy a multi-user kubeflow cluster](tutorials/deploy_ibm_cloud.md)
 
-Currently, the deployment is targeting kubeflow v1.3. The manifest used to
+Currently, the deployment is targeting kubeflow v1.3.1. The manifest used to
 deploy kubeflow is here:
-https://raw.githubusercontent.com/IBM/manifests/v1.3/distributions/kfdef/kfctl_ibm_multi_user.v1.3.0.yaml
+https://github.com/IBM/manifests/archive/v1.3.1.tar.gz
 
 For you to get start, please check out the tutorial
 [here](tutorials/deploy_ibm_cloud.md). It will guid you through the deployment

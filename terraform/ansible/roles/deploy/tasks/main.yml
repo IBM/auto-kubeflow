@@ -1,19 +1,28 @@
 ---
-- name: create kfdef
-  file:
-    path: "{{ lookup('env', 'HOME') }}/kfdef"
-    state: directory
-    mode: '0777'
-
-- name: download kfdef
-  get_url:
-    url: "{{ kfdef_uri }}"
-    dest: "{{ lookup('env', 'HOME') }}/kfdef/kdef.yaml"
-    mode: '0777'
+- name: param env
+  args:
+    chdir: "{{ lookup('env', 'HOME') }}/manifests-1.3.1"
+  shell: |
+    param=$(cat << EOF
+    OIDC_PROVIDER={{ appid_oauthServerUrl }}
+    REDIRECT_URL=https://{{ cluster_hostname }}/login/oidc
+    OIDC_AUTH_URL={{ appid_oauthServerUrl }}/authorization
+    EOF
+    )
+    secrets=$(cat << EOF
+    CLIENT_SECRET={{ appid_secret }}
+    CLIENT_ID={{ appid_clientId }}
+    EOF
+    )
+    echo "$param" > distributions/stacks/ibm/application/oidc-authservice-appid/params.env
+    echo "$secrets" > distributions/stacks/ibm/application/oidc-authservice-appid/secret_params.env
 
 - name: deploy kubeflow
   args:
-    chdir: "{{ lookup('env', 'HOME') }}/kfdef"
+    chdir: "{{ lookup('env', 'HOME') }}/manifests-1.3.1"
   shell: |
-    KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl delete service istio-ingressgateway -n istio-system || true
-    KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kfctl apply -f kdef.yaml
+    {{ lookup('env', 'HOME') }}/bin/kustomize build iks-multi \
+      | KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl apply -f -
+    sleep 30
+    {{ lookup('env', 'HOME') }}/bin/kustomize build iks-multi \
+      | KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl apply -f -
