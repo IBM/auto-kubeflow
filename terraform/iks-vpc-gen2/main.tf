@@ -44,6 +44,7 @@ module "vpc_cluster" {
   cluster_name         = var.cluster_name
   kube_version         = "${local.kube_version_str[0]}.${local.kube_version_str[1]}"
   name_suffix          = local.name_suffix
+  delete_volume        = var.delete_volume
   depends_on           = [ module.appid ]
 }
 

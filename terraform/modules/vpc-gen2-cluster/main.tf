@@ -50,6 +50,7 @@ resource "ibm_container_vpc_cluster" "cluster" {
   worker_count      = var.worker_count
   resource_group_id = data.ibm_resource_group.resource_group.id
   wait_till         = var.cluster_wait_til
+  force_delete_storage = var.delete_volume
 
   zones {
     subnet_id = ibm_is_subnet.subnet.id

@@ -73,3 +73,9 @@ variable "password" {
   type        = string
   description = "password to login kubeflow dashboard"
 }
+
+variable "delete_volume" {
+  default     = true
+  type        = bool
+  description = "delete volume when removing the cluster"
+}
