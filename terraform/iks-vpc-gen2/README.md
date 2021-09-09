@@ -1,9 +1,9 @@
 # Deploy Kubeflow on IBM Kubernetes Service using VPC Gen 2
 Use Schematics/Terraform + Ansible to create a VPC Gen 2 cluster on IBM Cloud,
-deploy kubeflow v1.3 multi-user and integrate it with AppID service. It uses
+deploy kubeflow v1.4 multi-user and integrate it with AppID service. It uses
 [kustomize](https://github.com/kubernetes-sigs/kustomize/releases/tag/v3.2.0)
 to do the deployment with the manifest files  here:
-"https://github.com/IBM/manifests/archive/v1.3.1.tar.gz"
+"https://github.com/IBM/manifests/archive/v1.4.0.tar.gz"
 
 The terraform templates are under this directory and used to create VPC
 Gen 2 cluster as well as AppID instance. The kubeflow deployment and
