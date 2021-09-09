@@ -30,7 +30,7 @@ to modify the playbook to accommodate your own environment.
 |  appid_plan            | The plan for AppID | string  |  | lite |  |
 |  appid_name            | Instnace name for AppID service | string  |   | appid-instance |  |
 |  username              | The user name to login to kubeflow dashboard | string  | ✓ |  |  |
-|  password              | The password to login to kubeflow dashboard | string  | ✓ |  |  |
+|  password              | The password to login to kubeflow dashboard | string  | ✓ |  | ✓ |
 |  cluster_name          | Cluster name | string  |   | my-kfp-cluster | |
 |  cluster_worker_flavor | The machine flavor for the cluster worker nodes | string  |   | bx2.8x32 |  |
 |  cluster_worker_count  | number of workers in the cluster | number  |   | 2 |  |

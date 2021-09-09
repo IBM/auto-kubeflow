@@ -31,7 +31,7 @@ to modify the playbook to accommodate your own environment.
 |  appid_plan            | The plan for AppID | string  |  | lite |  |
 |  appid_name            | Instnace name for AppID service | string  |   | appid-instance |  |
 |  username              | The user name to login to kubeflow dashboard | string  | ✓ |  |  |
-|  password              | The password to login to kubeflow dashboard | string  | ✓ |  |  |
+|  password              | The password to login to kubeflow dashboard | string  | ✓ |  | ✓ |
 |  cluster_name          | Cluster name | string  |   | my-kfp-cluster | |
 |  cluster_worker_flavor | The machine flavor for the cluster worker nodes | string  |   | b3c.4x16 |  |
 |  cluster_worker_count  | number of workers in the cluster | number  |   | 2 |  |
@@ -61,7 +61,7 @@ Create the Schematics provisioner workspace:
    - Enter a name for your workspace.
    - Click **Create** to create your workspace.
 2. On the workspace **Settings** page, enter the URL of this terraform
-   template: `https://github.com/IBM/auto-kubeflow/tree/main/terraform/iks_classic`.
+   template: `https://github.com/IBM/auto-kubeflow/tree/main/terraform/iks-classic`.
    - Select the Terraform version: Terraform 1.0.
    - Click **Save template information**.
    - In the **Input variables** section,  fill in the input variables. For example:
