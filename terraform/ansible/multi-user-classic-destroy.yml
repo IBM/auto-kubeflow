@@ -1,0 +1,7 @@
+---
+- name: tear down kubeflow
+  hosts: driver
+  roles:
+    - common
+    - storageclass
+    - undeploy

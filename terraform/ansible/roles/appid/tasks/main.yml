@@ -28,17 +28,54 @@
     -H 'Content-Type: multipart/form-data' \
     -F 'file=@{{ lookup('env', 'HOME') }}/bin/kubeflow-logo.png;type=image/png'
 
-- name: create appid config
-  shell: |
-    KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl delete secret oidc-authservice-client -n istio-system || true
-    KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl create secret generic \
-      oidc-authservice-client -n istio-system \
-      --from-literal="CLIENT_ID={{ appid_clientId }}" \
-      --from-literal="CLIENT_SECRET={{ appid_secret }}"
-    KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl get configmap \
-      oidc-authservice-parameters -n istio-system -o json | {{ lookup('env', 'HOME') }}/bin/jq \
-      '.data.OIDC_AUTH_URL=""|.data.OIDC_PROVIDER="{{ appid_oauthServerUrl }}"|.data.REDIRECT_URL="https://{{ cluster_hostname }}/login/oidc"|.data.SKIP_AUTH_URI=""' | \
-      KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl apply -f -
+
+- name: create user
+  uri:
+    url: "{{ appid_mgmt_url }}/cloud_directory/Users"
+    method: POST
+    headers:
+      Authorization: "Bearer {{ iam_token.json|json_query('access_token') }}"
+      accept: "application/json"
+    body_format: json
+    return_content: yes
+    status_code: [200, 201, 204, 409]
+    body: '{ "emails": [ { "value": "{{ appid_username }}", "primary": true } ], "userName": "{{ appid_username }}", "password": "{{ appid_password }}", "status": "CONFIRMED" }'
+
+- name: disable facebook
+  uri:
+    url: "{{ appid_mgmt_url }}/config/idps/facebook"
+    method: PUT
+    headers:
+      Authorization: "Bearer {{ iam_token.json|json_query('access_token') }}"
+      accept: "application/json"
+    body_format: json
+    return_content: yes
+    status_code: [200, 204]
+    body: '{ "isActive": false }'
+
+- name: disable google
+  uri:
+    url: "{{ appid_mgmt_url }}/config/idps/google"
+    method: PUT
+    headers:
+      Authorization: "Bearer {{ iam_token.json|json_query('access_token') }}"
+      accept: "application/json"
+    body_format: json
+    return_content: yes
+    status_code: [200, 204]
+    body: '{ "isActive": false }'
+
+- name: disable cloud directory
+  uri:
+    url: "{{ appid_mgmt_url }}/config/idps/cloud_directory"
+    method: PUT
+    headers:
+      Authorization: "Bearer {{ iam_token.json|json_query('access_token') }}"
+      accept: "application/json"
+    body_format: json
+    return_content: yes
+    status_code: [200, 204]
+    body: '{"isActive":true,"config":{"selfServiceEnabled":true,"interactions":{"identityConfirmation":{"accessMode":"FULL","methods":["email"]},"welcomeEnabled":true,"resetPasswordEnabled":true,"resetPasswordNotificationEnable":true},"signupEnabled":false}}'
 
 - name: restart oauth-service
   shell: |

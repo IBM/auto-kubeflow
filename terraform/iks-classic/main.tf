@@ -2,7 +2,7 @@ terraform {
   required_providers {
     ibm = {
       source = "IBM-Cloud/ibm"
-      version = "1.21.2"
+      version = "1.29.0"
     }
   }
 }
@@ -20,8 +20,7 @@ resource "random_id" "suffix" {
 
 locals {
   name_suffix           = "-${random_id.suffix.hex}"
-  kfdef_uri             = "https://raw.githubusercontent.com/IBM/manifests/v1.3/distributions/kfdef/kfctl_ibm_multi_user.v1.3.0.yaml"
-  kube_version_str        = split(".", var.kube_version)
+  kube_version_str      = split(".", var.kube_version)
 }
 
 module "appid" {
@@ -78,13 +77,14 @@ resource "null_resource" "ansible" {
         appid_secret            = module.appid.secret
         appid_oauthServerUrl    = module.appid.oauthServerUrl
         appid_id                = module.appid.appid_id
+        appid_username          = var.username
+        appid_password          = var.password
         kubectl_ver             = "v${var.kube_version}"
         appid_mgmt_url          = module.appid.managementUrl
         cluster_hostname        = module.classic_cluster.cluster_hostname
         cluster_name            = module.classic_cluster.cluster_name
         secret_name             = module.classic_cluster.cluster_secret
         kube_config             = data.ibm_container_cluster_config.cluster_config.config_file_path
-        kfdef_uri               = local.kfdef_uri
         kubeflow_logo_uri       = var.appid_login_logo
       }
     }

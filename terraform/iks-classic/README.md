@@ -1,13 +1,19 @@
 # Deploy Kubeflow on IBM Kubernete Service using Classic cluster
 Use Schematics/Terraform + Ansible to create a classic cluster on IBM Cloud,
-deploy kubeflow v1.3 multi-user and integrate it with AppID service. It uses the
-kfdef here: "https://raw.githubusercontent.com/IBM/manifests/v1.3/distributions/kfdef/kfctl_ibm_multi_user.v1.3.0.yaml"
+deploy kubeflow v1.3 multi-user and integrate it with AppID service. It uses
+[kustomize](https://github.com/kubernetes-sigs/kustomize/releases/tag/v3.2.0)
+to do the deployment with the manifest files  here:
+"https://github.com/IBM/manifests/archive/v1.3.1.tar.gz"
 
 The terraform templates are under this directory and used to create classic
 cluster as well as AppID instance. The kubeflow deployment and
 configuration are done by Ansible playbook under `ansible` directory.
 It uses [Ansible provisioner](https://github.com/radekg/terraform-provisioner-ansible)
-to perform Ansilbe playbook.
+to perform Ansilbe playbook. The AppID instance created by this tool would only have
+one user entry specified in the `username` and `password` inputs because of
+security concern. You can modify the settings of the newly created AppID instance after
+the deployment completes.
+
 
 Note: The Ansible playbook under `asnible` directory assumes the execution
 environment is Linux x86_64 architecture. If you want to run it locally, you may need
@@ -24,6 +30,8 @@ to modify the playbook to accommodate your own environment.
 |  kube_version          | kubernetes version | string  |  | 1.20.7 |  |
 |  appid_plan            | The plan for AppID | string  |  | lite |  |
 |  appid_name            | Instnace name for AppID service | string  |   | appid-instance |  |
+|  username              | The user name to login to kubeflow dashboard | string  | ✓ |  |  |
+|  password              | The password to login to kubeflow dashboard | string  | ✓ |  |  |
 |  cluster_name          | Cluster name | string  |   | my-kfp-cluster | |
 |  cluster_worker_flavor | The machine flavor for the cluster worker nodes | string  |   | b3c.4x16 |  |
 |  cluster_worker_count  | number of workers in the cluster | number  |   | 2 |  |
@@ -49,12 +57,12 @@ to modify the playbook to accommodate your own environment.
 ## Instructions
 Create the Schematics provisioner workspace:
 1. From the IBM Cloud menu select [Schematics](https://cloud.ibm.com/schematics/overview).
-   - Click **Create workspace**.   
-   - Enter a name for your workspace.   
+   - Click **Create workspace**.
+   - Enter a name for your workspace.
    - Click **Create** to create your workspace.
 2. On the workspace **Settings** page, enter the URL of this terraform
-   template: `https://github.com/IBM/auto-kubeflow/tree/main/terraform/iks-classic`.
-   - Select the Terraform version: Terraform 0.14.
+   template: `https://github.com/IBM/auto-kubeflow/tree/main/terraform/iks_classic`.
+   - Select the Terraform version: Terraform 1.0.
    - Click **Save template information**.
    - In the **Input variables** section,  fill in the input variables. For example:
      - `ibmcloud_api_key` IBM API key
@@ -64,6 +72,8 @@ Create the Schematics provisioner workspace:
        to get the available zones
      - `public_vlan_id` The public vlan id. When you decide the datacenter, you can use `ibmcloud ks vlan ls --zone <datacenter>` to list the available public vlan
      - `private_vlan_id` The private vlan id. When you decide the datacenter, you can use `ibmcloud ks vlan ls --zone <datacenter>` to list the available private vlan
+     - `username` The username to login to kubeflow dashboard
+     - `password` The password to login to kubeflow dashboard
 
      Note: In order to make the kubeflow work properly, the flavor of `b3c.4x16`
      and 2 worker nodes are the minimal requirements.

@@ -82,3 +82,13 @@ variable "zone" {
   description = "The datacenter where you want to provision the worker nodes for classic cluster"
   type        = string
 }
+
+variable "username" {
+  type        = string
+  description = "username to login kubeflow dashboard"
+}
+
+variable "password" {
+  type        = string
+  description = "password to login kubeflow dashboard"
+}

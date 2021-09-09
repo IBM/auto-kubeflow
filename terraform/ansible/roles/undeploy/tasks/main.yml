@@ -1,0 +1,18 @@
+---
+- name: deploy kubeflow
+  args:
+    chdir: "{{ lookup('env', 'HOME') }}/manifests-1.3.1"
+  shell: |
+    {{ lookup('env', 'HOME') }}/bin/kustomize build iks-multi \
+      | KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl delete -f -
+    sleep 30
+    {{ lookup('env', 'HOME') }}/bin/kustomize build iks-multi \
+      | KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl delete -f -
+    sleep 60
+    {{ lookup('env', 'HOME') }}/bin/kustomize build iks-multi \
+      | KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl delete -f -
+    sleep 60
+    {{ lookup('env', 'HOME') }}/bin/kustomize build iks-multi \
+      | KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl delete -f -
+    sleep 60
+    exit 0

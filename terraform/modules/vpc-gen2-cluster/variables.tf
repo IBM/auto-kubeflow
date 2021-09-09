@@ -50,3 +50,9 @@ variable "name_suffix" {
   type        = string
   description = "suffix for all of the resources that would be created"
 }
+
+variable "delete_volume" {
+  default     = true
+  type        = bool
+  description = "delete volume when removing the cluster"
+}
