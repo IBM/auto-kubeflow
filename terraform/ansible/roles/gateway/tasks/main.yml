@@ -13,16 +13,20 @@
       servers:
       - port:
           number: 80
-          name: http
+          name: http1
+          protocol: HTTP
+        hosts:
+        - '*.{{ cluster_hostname }}'
+      - port:
+          number: 80
+          name: http2
           protocol: HTTP
         hosts:
         - '{{ cluster_hostname }}'
-        - '*.{{ cluster_hostname }}'
         tls:
           httpsRedirect: true
       - hosts:
         - '{{ cluster_hostname }}'
-        - '*.{{ cluster_hostname }}'
         port:
           name: https
           number: 443
@@ -35,6 +39,56 @@
     )
 
     echo "$GATEWAY" | KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl apply -f -
+
+- name: update envoy-filter
+  shell: |
+    ENVOYFILTER=$(cat << EOF
+    apiVersion: networking.istio.io/v1alpha3
+    kind: EnvoyFilter
+    metadata:
+      labels:
+        app.kubernetes.io/component: oidc-authservice
+        app.kubernetes.io/name: oidc-authservice
+      name: authn-filter
+      namespace: istio-system
+    spec:
+      configPatches:
+      - applyTo: HTTP_FILTER
+        match:
+          context: GATEWAY
+          listener:
+            filterChain:
+              filter:
+                name: envoy.filters.network.http_connection_manager
+            portNumber: 8443
+        patch:
+          operation: INSERT_BEFORE
+          value:
+            name: envoy.filters.http.ext_authz
+            typed_config:
+              '@type': type.googleapis.com/envoy.extensions.filters.http.ext_authz.v3.ExtAuthz
+              http_service:
+                authorization_request:
+                  allowed_headers:
+                    patterns:
+                    - exact: authorization
+                    - exact: cookie
+                    - exact: x-auth-token
+                authorization_response:
+                  allowed_upstream_headers:
+                    patterns:
+                    - exact: kubeflow-userid
+                server_uri:
+                  cluster: outbound|8080||authservice.istio-system.svc.cluster.local
+                  timeout: 10s
+                  uri: http://authservice.istio-system.svc.cluster.local
+      workloadSelector:
+        labels:
+          istio: ingressgateway
+    EOF
+    )
+
+    echo "$ENVOYFILTER" | KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl apply -f -
 
 - name: update knative settings
   shell: |
