@@ -27,6 +27,7 @@
           httpsRedirect: true
       - hosts:
         - '{{ cluster_hostname }}'
+        - '*.{{ cluster_hostname }}'
         port:
           name: https
           number: 443
