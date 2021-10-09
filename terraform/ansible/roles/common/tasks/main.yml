@@ -33,7 +33,7 @@
 
 - name: download manifest
   get_url:
-    url: https://github.com/IBM/manifests/archive/v1.4.0.tar.gz
+    url: https://github.com/yhwang/manifests/archive/ibm-1.4.0.tar.gz
     dest: "{{ lookup('env', 'HOME') }}/v1.4.0.tar.gz"
     mode: '0555'
 

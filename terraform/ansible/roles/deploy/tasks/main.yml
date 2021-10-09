@@ -1,7 +1,7 @@
 ---
 - name: param env
   args:
-    chdir: "{{ lookup('env', 'HOME') }}/manifests-1.4.0"
+    chdir: "{{ lookup('env', 'HOME') }}/manifests-ibm-1.4.0"
   shell: |
     param=$(cat << EOF
     OIDC_PROVIDER={{ appid_oauthServerUrl }}
@@ -19,7 +19,7 @@
 
 - name: deploy kubeflow
   args:
-    chdir: "{{ lookup('env', 'HOME') }}/manifests-1.4.0"
+    chdir: "{{ lookup('env', 'HOME') }}/manifests-ibm-1.4.0"
   shell: |
     {{ lookup('env', 'HOME') }}/bin/kustomize build iks-multi \
       | KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl apply -f -
