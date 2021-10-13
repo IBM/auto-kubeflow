@@ -68,8 +68,8 @@ Create the Schematics provisioner workspace:
      - `ibmcloud_api_key` IBM API key
      - `org` The organization of IBM Cloud
      - `space` The space of IBM Cloud
-     - `zone` Where the new cluster will be created. You can use `ibmcloud ks zone ls --provider classic`
-       to get the available zones
+     - `zone` Where the new cluster will be created. You can use `ibmcloud ks zone ls --region-only --provider classic`
+       to get the available zones based on your region
      - `public_vlan_id` The public vlan id. When you decide the datacenter, you can use `ibmcloud ks vlan ls --zone <datacenter>` to list the available public vlan
      - `private_vlan_id` The private vlan id. When you decide the datacenter, you can use `ibmcloud ks vlan ls --zone <datacenter>` to list the available private vlan
      - `username` The username to login to kubeflow dashboard
