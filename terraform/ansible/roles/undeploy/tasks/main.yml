@@ -3,16 +3,35 @@
   args:
     chdir: "{{ lookup('env', 'HOME') }}/manifests-1.4.0"
   shell: |
-    {{ lookup('env', 'HOME') }}/bin/kustomize build iks-multi \
-      | KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl delete -f -
+    KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl delete profile --all
+
+    # wait for 30 seconds to allow profile manager to work
     sleep 30
+
+    REV=1
+    ENDTIME=$(date -ud "15 minute" +%s)
+    while [[ "$(date -u +%s)" -le "$ENDTIME" ]]; do
+      ALL_NS=$(KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl get ns)
+      if ! echo "$ALL_NS" | awk '{print $2}' | grep -iq terminating; then
+        REV=0
+        break;
+      fi
+      echo "$ALL_NS"
+      sleep 10
+    done
+
     {{ lookup('env', 'HOME') }}/bin/kustomize build iks-multi \
       | KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl delete -f -
-    sleep 60
-    {{ lookup('env', 'HOME') }}/bin/kustomize build iks-multi \
-      | KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl delete -f -
-    sleep 60
-    {{ lookup('env', 'HOME') }}/bin/kustomize build iks-multi \
-      | KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl delete -f -
-    sleep 60
+
+    ENDTIME=$(date -ud "15 minute" +%s)
+    while [[ "$(date -u +%s)" -le "$ENDTIME" ]]; do
+      ALL_NS=$(KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl get ns)
+      if ! echo "$ALL_NS" | awk '{print $2}' | grep -iq terminating; then
+        REV=0
+        break;
+      fi
+      echo "$ALL_NS"
+      sleep 10
+    done
+
     exit 0
