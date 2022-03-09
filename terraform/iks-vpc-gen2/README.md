@@ -49,7 +49,7 @@ Create the Schematics provisioner workspace:
    - Enter a name for your workspace.   
    - Click **Create** to create your workspace.
 2. On the workspace **Settings** page, enter the URL of this terraform
-   template: `https://github.com/yhwang/auto-kubeflow/tree/kfp-v1.2/terraform/iks-vpc-gen2`.
+   template: `https://github.com/yhwang/auto-kubeflow/tree/kf-v1.2/terraform/iks-vpc-gen2`.
    - Select the Terraform version: Terraform 0.14.
    - Click **Save template information**.
    - In the **Input variables** section,  fill in the input variables. For example:

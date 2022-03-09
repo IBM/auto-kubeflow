@@ -45,11 +45,11 @@ to modify the playbook to accommodate your own environment.
 ## Instructions
 Create the Schematics provisioner workspace:
 1. From the IBM Cloud menu select [Schematics](https://cloud.ibm.com/schematics/overview).
-   - Click **Create workspace**.   
-   - Enter a name for your workspace.   
+   - Click **Create workspace**.
+   - Enter a name for your workspace.
    - Click **Create** to create your workspace.
 2. On the workspace **Settings** page, enter the URL of this terraform
-   template: `https://github.com/yhwang/auto-kubeflow/tree/main/terraform`.
+   template: `https://github.com/IBM/auto-kubeflow/tree/kf-v1.2/terraform/iks-vpc-gen2`.
    - Select the Terraform version: Terraform 0.13.
    - Click **Save template information**.
    - In the **Input variables** section,  fill in the input variables. For example:
