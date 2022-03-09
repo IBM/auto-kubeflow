@@ -1,9 +1,9 @@
 # Deploy Kubeflow on IBM Kubernete Service using Classic cluster
 Use Schematics/Terraform + Ansible to create a classic cluster on IBM Cloud,
-deploy kubeflow v1.4 multi-user and integrate it with AppID service. It uses
+deploy kubeflow v1.5 multi-user and integrate it with AppID service. It uses
 [kustomize](https://github.com/kubernetes-sigs/kustomize/releases/tag/v3.2.0)
 to do the deployment with the manifest files  here:
-"https://github.com/IBM/manifests/archive/v1.4.0.tar.gz"
+"https://github.com/IBM/manifests/archive/v1.5-branch.tar.gz"
 
 The terraform templates are under this directory and used to create classic
 cluster as well as AppID instance. The kubeflow deployment and
@@ -27,7 +27,7 @@ to modify the playbook to accommodate your own environment.
 |  org                   | IBM Cloud organization | string  |  ✓ |  |  |
 |  space                 | The space in IBM Cloud | string  | ✓ |  |  |
 |  resource_group        | The resource group in IBM Cloud | string  |  | default |  |
-|  kube_version          | kubernetes version | string  |  | 1.20.7 |  |
+|  kube_version          | kubernetes version | string  |  | 1.21.10 |  |
 |  appid_plan            | The plan for AppID | string  |  | lite |  |
 |  appid_name            | Instnace name for AppID service | string  |   | appid-instance |  |
 |  username              | The user name to login to kubeflow dashboard | string  | ✓ |  |  |
@@ -62,7 +62,7 @@ Create the Schematics provisioner workspace:
    - Click **Create** to create your workspace.
 2. On the workspace **Settings** page, enter the URL of this terraform
    template: `https://github.com/IBM/auto-kubeflow/tree/main/terraform/iks-classic`.
-   - Select the Terraform version: Terraform 1.0.
+   - Select the Terraform version: Terraform 1.1.
    - Click **Save template information**.
    - In the **Input variables** section,  fill in the input variables. For example:
      - `ibmcloud_api_key` IBM API key

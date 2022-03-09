@@ -27,15 +27,15 @@ Here is the summary of the contnets provided in this repo (more to come):
 - [Step by step tutorial of using Schematics service and resources on this repo
   to deploy a multi-user kubeflow cluster](tutorials/deploy_ibm_cloud.md)
 
-Currently, the deployment is targeting kubeflow v1.4.0. The manifest used to
+Currently, the deployment is targeting kubeflow v1.5.0. The manifest used to
 deploy kubeflow is here:
-https://github.com/IBM/manifests/archive/v1.4.0.tar.gz
+https://github.com/IBM/manifests/archive/v1.5-branch.tar.gz
 
 If you want to deploy previous release, you can find corresponding branches in
-this repository, i.e. v1.3.1 in `kfp-v1.3.1` branch and v1.2 in `kfp-v1.2` branch.
+this repository, i.e. v1.4.0 in `kf-v1.4.0` branch and v1.3.1 in `kf-v1.3.1` branch.
 When you go the the specific branch, you can see which manifests it uses. For example,
 you can use this url as the your workspace in schematics:
-https://github.com/IBM/auto-kubeflow/tree/kfp-v1.3.1/terraform/iks-classic .
+https://github.com/IBM/auto-kubeflow/tree/kf-v1.3.1/terraform/iks-classic .
 It deploys kubeflow v1.3.1 using https://github.com/IBM/manifests/archive/v1.3.1.tar.gz
 manifests.
 
