@@ -61,7 +61,7 @@ Create the Schematics provisioner workspace:
    - Enter a name for your workspace.
    - Click **Create** to create your workspace.
 2. On the workspace **Settings** page, enter the URL of this terraform
-   template: `https://github.com/IBM/auto-kubeflow/tree/main/terraform/iks-classic`.
+   template: `https://github.com/IBM/auto-kubeflow/tree/kf-v1.4.0/terraform/iks-classic`.
    - Select the Terraform version: Terraform 1.0.
    - Click **Save template information**.
    - In the **Input variables** section,  fill in the input variables. For example:
