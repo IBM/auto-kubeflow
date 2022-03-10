@@ -33,13 +33,13 @@
 
 - name: download manifest
   get_url:
-    url: https://github.com/IBM/manifests/archive/v1.4.0.tar.gz
-    dest: "{{ lookup('env', 'HOME') }}/v1.4.0.tar.gz"
+    url: https://github.com/IBM/manifests/archive/v1.5-branch.tar.gz
+    dest: "{{ lookup('env', 'HOME') }}/v1.5.0.tar.gz"
     mode: '0555'
 
 - name: unarchive manifest
   unarchive:
-    src: "{{ lookup('env', 'HOME') }}/v1.4.0.tar.gz"
+    src: "{{ lookup('env', 'HOME') }}/v1.5.0.tar.gz"
     dest: "{{ lookup('env', 'HOME') }}/"
 
 - name: download kubeflow logo
