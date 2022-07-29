@@ -27,7 +27,7 @@ to modify the playbook to accommodate your own environment.
 |  org                   | IBM Cloud organization | string  |  ✓ |  |  |
 |  space                 | The space in IBM Cloud | string  | ✓ |  |  |
 |  resource_group        | The resource group in IBM Cloud | string  |  | default |  |
-|  kube_version          | kubernetes version | string  |  | 1.21.10 |  |
+|  kube_version          | kubernetes version | string  |  | 1.23.9 |  |
 |  appid_plan            | The plan for AppID | string  |  | lite |  |
 |  appid_name            | Instnace name for AppID service | string  |   | appid-instance |  |
 |  username              | The user name to login to kubeflow dashboard | string  | ✓ |  |  |
