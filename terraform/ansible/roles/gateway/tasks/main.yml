@@ -98,5 +98,5 @@
     | KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl apply -f -
 
     KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl get configmap config-network -n knative-serving -o json \
-    | KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/jq '.data.domainTemplate="{{ '{{' }}.Name{{ '}}' }}-{{ '{{' }}.Namespace{{ '}}' }}.{{ '{{' }}.Domain{{ '}}' }}"' \
+    | KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/jq '.data."domain-template"="{{ '{{' }}.Name{{ '}}' }}-{{ '{{' }}.Namespace{{ '}}' }}.{{ '{{' }}.Domain{{ '}}' }}"' \
     | KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl apply -f -
