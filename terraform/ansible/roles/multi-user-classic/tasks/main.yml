@@ -1,6 +1,7 @@
 ---
 - name: create load balancer for istio-ingressgatewway
   shell: |
+    ibmcloud config --check-version=false
     KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl get svc/istio-ingressgateway -n istio-system -o json \
     | {{ lookup('env', 'HOME') }}/bin/jq '.spec.type="LoadBalancer"' | KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl apply -f - || true
 
