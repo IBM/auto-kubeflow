@@ -53,3 +53,9 @@ variable "password" {
   type        = string
   description = "password to login kubeflow dashboard"
 }
+
+variable "manifest_branch" {
+  type        = string
+  default     = "1.7"
+  description = "manifests branch"
+}

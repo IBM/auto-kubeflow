@@ -18,7 +18,7 @@ variable space {
 
 variable kube_version {
   type        = string
-  default     = "1.23.9"
+  default     = "1.25.6"
   description = "kubectl version"
 }
 
@@ -78,4 +78,10 @@ variable "delete_volume" {
   default     = true
   type        = bool
   description = "delete volume when removing the cluster"
+}
+
+variable "manifest_branch" {
+  type        = string
+  default     = "1.7"
+  description = "manifests branch"
 }

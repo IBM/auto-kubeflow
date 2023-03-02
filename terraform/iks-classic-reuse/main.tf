@@ -2,7 +2,7 @@ terraform {
   required_providers {
     ibm = {
       source = "IBM-Cloud/ibm"
-      version = "1.43.0"
+      version = "1.50.0"
     }
   }
 }
@@ -64,6 +64,7 @@ resource "null_resource" "ansible" {
     org                     = var.org
     space                   = var.space
     resource_group          = var.resource_group
+    manifest_branch         = var.manifest_branch
     appid_clientId          = ibm_resource_key.resource_key.credentials["clientId"]
     appid_secret            = ibm_resource_key.resource_key.credentials["secret"]
     appid_oauthServerUrl    = ibm_resource_key.resource_key.credentials["oauthServerUrl"]
@@ -93,6 +94,7 @@ resource "null_resource" "ansible" {
         org                     = var.org
         space                   = var.space
         resource_group          = var.resource_group
+        manifest_branch         = var.manifest_branch
         appid_clientId          = ibm_resource_key.resource_key.credentials["clientId"]
         appid_secret            = ibm_resource_key.resource_key.credentials["secret"]
         appid_oauthServerUrl    = ibm_resource_key.resource_key.credentials["oauthServerUrl"]
@@ -125,6 +127,7 @@ resource "null_resource" "ansible" {
         org                     = self.triggers.org
         space                   = self.triggers.space
         resource_group          = self.triggers.resource_group
+        manifest_branch         = self.triggers.manifest_branch
         appid_clientId          = self.triggers.appid_clientId
         appid_secret            = self.triggers.appid_secret
         appid_oauthServerUrl    = self.triggers.appid_oauthServerUrl
