@@ -1,7 +1,7 @@
 ---
 - name: deploy kubeflow
   args:
-    chdir: "{{ lookup('env', 'HOME') }}/manifests-1.6-branch"
+    chdir: "{{ lookup('env', 'HOME') }}/manifests-{{ manifest_branch }}-branch"
   shell: |
     KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl delete profile --all
 

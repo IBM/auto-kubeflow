@@ -18,7 +18,7 @@ variable space {
 
 variable kube_version {
   type        = string
-  default     = "1.23.9"
+  default     = "1.25.6"
   description = "kubectl version"
 }
 
@@ -91,4 +91,10 @@ variable "username" {
 variable "password" {
   type        = string
   description = "password to login kubeflow dashboard"
+}
+
+variable "manifest_branch" {
+  type        = string
+  default     = "1.7"
+  description = "manifests branch"
 }

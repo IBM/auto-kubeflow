@@ -2,7 +2,7 @@ terraform {
   required_providers {
     ibm = {
       source = "IBM-Cloud/ibm"
-      version = "1.43.0"
+      version = "1.50.0"
     }
   }
 }
@@ -70,6 +70,7 @@ resource "null_resource" "ansible" {
         org                     = var.org
         space                   = var.space
         resource_group          = var.resource_group
+        manifest_branch         = var.manifest_branch
         appid_clientId          = module.appid.clientId
         appid_secret            = module.appid.secret
         appid_oauthServerUrl    = module.appid.oauthServerUrl
