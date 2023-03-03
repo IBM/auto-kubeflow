@@ -17,7 +17,7 @@
     body_format: json
     return_content: yes
     status_code: [200, 204]
-    body: '{"redirectUris": ["https://{{ cluster_hostname }}/login/oidc"]}'
+    body: '{"redirectUris": ["https://{{ cluster_hostname }}/authservice/oidc/callback"]}'
 
 - name: upload kubeflow logo
   shell: |
