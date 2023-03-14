@@ -21,8 +21,8 @@
   args:
     chdir: "{{ lookup('env', 'HOME') }}/manifests-{{ manifest_branch }}-branch"
   shell: |
-    {{ lookup('env', 'HOME') }}/bin/kustomize build iks-multi \
+    {{ lookup('env', 'HOME') }}/bin/kustomize build iks-multi 2>/dev/null | awk '!/well-defined/' \
       | KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl apply -f -
     sleep 30
-    {{ lookup('env', 'HOME') }}/bin/kustomize build iks-multi \
+    {{ lookup('env', 'HOME') }}/bin/kustomize build iks-multi 2>/dev/null | awk '!/well-defined/' \
       | KUBECONFIG={{ kube_config }} {{ lookup('env', 'HOME') }}/bin/kubectl apply -f -

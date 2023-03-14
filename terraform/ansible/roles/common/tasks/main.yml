@@ -21,9 +21,14 @@
 
 - name: download kustomize
   get_url:
-    url: https://github.com/kubernetes-sigs/kustomize/releases/download/v3.2.0/kustomize_3.2.0_linux_amd64
-    dest: "{{ lookup('env', 'HOME') }}/bin/kustomize"
+    url: https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv5.0.0/kustomize_v5.0.0_linux_amd64.tar.gz
+    dest: "{{ lookup('env', 'HOME') }}/bin/kustomize.tar.gz"
     mode: '0555'
+
+- name: unarchive kustomize
+  unarchive:
+    src: "{{ lookup('env', 'HOME') }}/bin/kustomize.tar.gz"
+    dest: "{{ lookup('env', 'HOME') }}/bin/"
 
 - name: download jq
   get_url:
