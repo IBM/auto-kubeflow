@@ -5,7 +5,7 @@
 
 - name: set target
   shell:
-    cmd: ibmcloud target -r "{{ region }}" -o "{{ org }}" -s "{{ space }}" -g "{{ resource_group }}"
+    cmd: ibmcloud target -r "{{ region }}" -g "{{ resource_group }}"
 
 - name: create bin
   file:

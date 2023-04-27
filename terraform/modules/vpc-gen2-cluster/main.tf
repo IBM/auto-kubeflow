@@ -34,7 +34,7 @@ resource "null_resource" "update_default_sg" {
     command = <<EOF
         ibmcloud config --check-version=false
         ibmcloud login --apikey ${var.ibmcloud_api_key} --no-region
-        ibmcloud target -r "${var.region}" -o "${var.org}" -s "${var.space}" -g "${var.resource_group}"
+        ibmcloud target -r "${var.region}" -g "${var.resource_group}"
         ibmcloud is security-group-rule-update ${ibm_is_vpc.vpc.default_security_group} ${ibm_is_vpc.vpc.security_group[0].rules[0].rule_id} --direction ${ibm_is_vpc.vpc.security_group[0].rules[0].direction} --remote "0.0.0.0/0"
         ibmcloud is security-group-rule-update ${ibm_is_vpc.vpc.default_security_group} ${ibm_is_vpc.vpc.security_group[0].rules[1].rule_id} --direction ${ibm_is_vpc.vpc.security_group[0].rules[1].direction} --remote "0.0.0.0/0"
 EOF
